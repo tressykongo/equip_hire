@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Equip-Hire Equipment</title>
+</head>
+<body>
+
+    <h1>Available Equipment</h1>
+
+    {% for item in equipment %}
+        <div>
+            <h2>{{ item.name }}</h2>
+            <p>{{ item.description }}</p>
+            <p>Category: {{ item.category }}</p>
+            <p>Rental Price: {{ item.rental_price }}</p>
+            
+            {% if item.available %}
+                <p>Available: Yes</p>
+            {% else %}
+                <p>Available: No</p>
+            {% endif %}
+        </div>
+
+        <hr>
+    {% empty %}
+        <p>No equipment available at the moment.</p>
+    {% endfor %}
+
+</body>
+</html>
