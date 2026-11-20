@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Dashboard - Equip-Hire</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f5f7;
+            color: #252525;
+        }
+
+        header {
+            background: #252525;
+            color: white;
+            padding: 22px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            color: #f28c28;
+            margin: 0;
+        }
+
+        header p {
+            margin: 5px 0 0;
+            color: #ddd;
+        }
+
+        .logout {
+            background: #f28c28;
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .logout:hover {
+            background: #d97716;
+        }
+
+        .container {
+            padding: 40px 7%;
+        }
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #666;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 28px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+        }
+
+        .dashboard-card h3 {
+            margin-top: 0;
+            font-size: 21px;
+        }
+
+        .dashboard-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .card-button {
+            display: inline-block;
+            background: #f28c28;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .card-button:hover {
+            background: #d97716;
+        }
+
+        .secondary-button {
+            background: #333;
+        }
+
+        .secondary-button:hover {
+            background: #555;
+        }
+
+        footer {
+            background: #252525;
+            color: #ccc;
+            text-align: center;
+            padding: 18px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h1>Equip-Hire</h1>
+        <p>Equipment Owner Portal</p>
+    </div>
+
+    <a href="{% url 'logout' %}" class="logout">Logout</a>
+</header>
+
+<div class="container">
+
+    <div class="welcome">
+        <h2>Welcome, {{ request.user.username }}!</h2>
+        <p>Manage your construction equipment and grow your hiring business.</p>
+    </div>
+
+    <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+            <h3>Add Equipment</h3>
+            <p>
+                List your construction equipment, upload photos,
+                provide descriptions and set your rental prices.
+            </p>
+
+            <a href="{% url 'add_equipment' %}" class="card-button">
+                + Add Equipment
+            </a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Manage My Listings</h3>
+            <p>
+                View your equipment listings, update their details
+                and remove equipment that you no longer want to hire out.
+            </p>
+
+            <a href="{% url 'equipment_list' %}" class="card-button secondary-button">
+                View Listings
+            </a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Rental Requests</h3>
+            <p>
+                View requests from people interested in hiring
+                your construction equipment and respond to them.
+            </p>
+
+            <p><strong>Coming soon</strong></p>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>My Account</h3>
+            <p>
+                You are registered as an Equipment Owner.
+                Use Equip-Hire to advertise your equipment for hire.
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Equip-Hire. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

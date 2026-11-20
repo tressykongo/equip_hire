@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Equipment - Equip-Hire</title>
+</head>
+<body>
+
+    <h1>Equip-Hire</h1>
+    <h2>Edit Equipment Details</h2>
+
+    {% if form.instance.image %}
+        <p>Current equipment photo:</p>
+        <img src="{{ form.instance.image.url }}" alt="Equipment photo" width="250">
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">Update Equipment</button>
+    </form>
+
+    <p>
+        <a href="{% url 'equipment_list' %}">Back to Equipment List</a>
+    </p>
+
+</body>
+</html>

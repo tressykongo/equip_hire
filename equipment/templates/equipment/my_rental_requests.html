@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Rental Requests - Equip-Hire</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f5f7;
+            color: #252525;
+        }
+
+        header {
+            background: #252525;
+            color: white;
+            padding: 22px 7%;
+        }
+
+        header h2 {
+            color: #f28c28;
+            margin: 0;
+        }
+
+        .container {
+            padding: 35px 7%;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .top-section p {
+            color: #666;
+        }
+
+        .back-button {
+            background: #252525;
+            color: white;
+            padding: 12px 18px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .request-card {
+            background: white;
+            padding: 22px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+        }
+
+        .request-card h3 {
+            margin-top: 0;
+            font-size: 21px;
+        }
+
+        .request-card p {
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .price {
+            color: #e67e22 !important;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .accepted {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .empty-message {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 10px;
+            color: #666;
+        }
+
+        footer {
+            background: #252525;
+            color: #ccc;
+            text-align: center;
+            padding: 18px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px 5%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>Equip-Hire</h2>
+</header>
+
+<div class="container">
+
+    <div class="top-section">
+        <div>
+            <h1>My Rental Requests</h1>
+            <p>Track the status of your equipment hiring requests.</p>
+        </div>
+
+        <a href="{% url 'equipment_list' %}" class="back-button">
+            Browse Equipment
+        </a>
+    </div>
+
+    {% for item in rental_requests %}
+
+        <div class="request-card">
+
+            <h3>{{ item.equipment.name }}</h3>
+
+            <p>
+                <strong>Category:</strong>
+                {{ item.equipment.category }}
+            </p>
+
+            <p class="price">
+                KSh {{ item.equipment.rental_price }}
+            </p>
+
+            <p>
+                <strong>Your Message:</strong>
+                {{ item.message|default:"No message provided." }}
+            </p>
+
+            <p>
+                <strong>Request Date:</strong>
+                {{ item.requested_at|date:"d M Y, H:i" }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+
+                {% if item.status == 'PENDING' %}
+                    <span class="status pending">Pending</span>
+                {% elif item.status == 'ACCEPTED' %}
+                    <span class="status accepted">Accepted</span>
+                {% elif item.status == 'REJECTED' %}
+                    <span class="status rejected">Rejected</span>
+                {% endif %}
+            </p>
+
+        </div>
+
+    {% empty %}
+
+        <div class="empty-message">
+            <h3>You Have No Rental Requests Yet</h3>
+            <p>Browse available equipment and submit a request to get started.</p>
+        </div>
+
+    {% endfor %}
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Equip-Hire. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

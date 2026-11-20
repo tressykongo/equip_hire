@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Equipment - Equip-Hire</title>
+</head>
+<body>
+
+    <h1>Equip-Hire</h1>
+    <h2>Add New Equipment</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">Save Equipment</button>
+    </form>
+
+    <p>
+        <a href="{% url 'equipment_list' %}">Back to Equipment List</a>
+    </p>
+
+</body>
+</html>
