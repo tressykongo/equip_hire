@@ -67,6 +67,60 @@
             font-weight: bold;
         }
 
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        .filter-section h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .filter-form {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-form select {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+            background: white;
+        }
+
+        .filter-button {
+            background: #f28c28;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .clear-filter {
+            color: #c0392b;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .filter-result {
+            color: #666;
+            font-size: 14px;
+            margin: 12px 0 0;
+        }
+
         .equipment-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -114,11 +168,42 @@
             font-size: 14px;
         }
 
+        .location {
+            background: #f5f7fa;
+            border-left: 4px solid #f28c28;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .location-title {
+            font-weight: bold;
+            margin: 0 0 7px;
+            color: #333;
+        }
+
+        .location-details {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
         .price {
             color: #e67e22;
             font-weight: bold;
             font-size: 19px;
             margin: 15px 0;
+        }
+
+        .rental-period {
+            display: inline-block;
+            background: #fff3e6;
+            color: #b65c0a;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 13px;
+            margin-top: 5px;
         }
 
         .available {
@@ -193,6 +278,15 @@
             header {
                 padding: 20px 5%;
             }
+
+            .filter-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-form select {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -205,6 +299,8 @@
 </header>
 
 <div class="container">
+
+    {% include 'back_button.html' %}
 
     {% if messages %}
         <div class="messages">
@@ -232,6 +328,50 @@
         {% endif %}
     </div>
 
+    {% if not is_owner %}
+        <div class="filter-section">
+
+            <h3>Find Equipment by County</h3>
+
+            <form method="GET" class="filter-form">
+
+                <select name="county">
+                    <option value="">All Counties</option>
+
+                    {% for county_value, county_label in counties %}
+                        <option value="{{ county_value }}"
+                            {% if selected_county == county_value %}selected{% endif %}>
+                            {{ county_label }}
+                        </option>
+                    {% endfor %}
+
+                </select>
+
+                <button type="submit" class="filter-button">
+                    Filter Equipment
+                </button>
+
+                {% if selected_county %}
+                    <a href="{% url 'equipment_list' %}" class="clear-filter">
+                        Clear Filter
+                    </a>
+                {% endif %}
+
+            </form>
+
+            {% if selected_county %}
+                <p class="filter-result">
+                    Showing equipment in {{ selected_county }} County.
+                </p>
+            {% else %}
+                <p class="filter-result">
+                    Select a county to find equipment available in that location.
+                </p>
+            {% endif %}
+
+        </div>
+    {% endif %}
+
     <div class="equipment-grid">
 
         {% for item in equipment %}
@@ -258,9 +398,35 @@
                         Category: {{ item.category }}
                     </p>
 
+                    <div class="location">
+                        <p class="location-title">
+                            &#128205; Equipment Location
+                        </p>
+
+                        <p class="location-details">
+                            {% if item.county %}
+                                {{ item.county }} County
+                            {% else %}
+                                County not provided
+                            {% endif %}
+
+                            {% if item.town %}
+                                , {{ item.town }}
+                            {% endif %}
+
+                            {% if item.area %}
+                                <br>Area: {{ item.area }}
+                            {% endif %}
+                        </p>
+                    </div>
+
                     <p class="price">
-                        KSh {{ item.rental_price }}
+                        {{ item.get_formatted_price }}
                     </p>
+
+                    <span class="rental-period">
+                        {{ item.get_rental_period_display }}
+                    </span>
 
                     <p>
                         {% if item.available %}
@@ -307,7 +473,20 @@
                     <p>Start by adding equipment you want to offer for hire.</p>
                 {% else %}
                     <h3>No Equipment Available</h3>
-                    <p>There is currently no equipment available for hire.</p>
+                    {% if selected_county %}
+                        <p>
+                            No equipment is currently available in
+                            {{ selected_county }} County.
+                        </p>
+                        <a href="{% url 'equipment_list' %}"
+                           class="request-button">
+                            View All Equipment
+                        </a>
+                    {% else %}
+                        <p>
+                            There is currently no equipment available for hire.
+                        </p>
+                    {% endif %}
                 {% endif %}
             </div>
 

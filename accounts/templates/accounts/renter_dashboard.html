@@ -46,7 +46,6 @@
             text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
-            transition: 0.3s;
         }
 
         .logout:hover {
@@ -93,6 +92,33 @@
             line-height: 1.6;
         }
 
+        .notification-count {
+            display: inline-block;
+            background: #fff0df;
+            color: #c66a0b;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .message-count {
+            display: inline-block;
+            background: #e8f0ff;
+            color: #2456a6;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .all-caught-up {
+            color: #38804b !important;
+            font-weight: bold;
+        }
+
         .card-button {
             display: inline-block;
             background: #f28c28;
@@ -102,11 +128,45 @@
             text-decoration: none;
             font-weight: bold;
             margin-top: 10px;
-            transition: 0.3s;
         }
 
         .card-button:hover {
             background: #d97716;
+        }
+
+        .pricing-section {
+            background: white;
+            padding: 28px;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+        }
+
+        .pricing-section h3 {
+            margin-top: 0;
+        }
+
+        .pricing-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .pricing-option {
+            background: #fff7ed;
+            padding: 18px;
+            border-left: 4px solid #f28c28;
+            border-radius: 6px;
+        }
+
+        .pricing-option h4 {
+            margin: 0 0 8px;
+            color: #d97716;
+        }
+
+        .pricing-option p {
+            margin: 0;
+            color: #666;
         }
 
         footer {
@@ -149,7 +209,8 @@
             <h3>Browse Equipment</h3>
             <p>
                 Explore construction equipment available for hire.
-                View equipment photos, descriptions and rental prices.
+                View equipment photos, descriptions and rental prices,
+                including the rental duration.
             </p>
 
             <a href="{% url 'equipment_list' %}" class="card-button">
@@ -170,11 +231,87 @@
         </div>
 
         <div class="dashboard-card">
+            <h3>My Notifications</h3>
+
+            <p>
+                Receive updates when equipment owners accept
+                or reject your rental requests.
+            </p>
+
+            {% if unread_count > 0 %}
+                <div class="notification-count">
+                    {{ unread_count }} Unread Notification{{ unread_count|pluralize }}
+                </div>
+            {% else %}
+                <p class="all-caught-up">
+                    ✓ You're all caught up!
+                </p>
+            {% endif %}
+
+            <a href="{% url 'renter_notifications' %}" class="card-button">
+                View Notifications
+            </a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>My Messages</h3>
+
+            <p>
+                Communicate directly with equipment owners
+                about your accepted rental requests.
+            </p>
+
+            {% if unread_message_count > 0 %}
+                <div class="message-count">
+                    {{ unread_message_count }} Unread Message{{ unread_message_count|pluralize }}
+                </div>
+            {% else %}
+                <p class="all-caught-up">
+                    ✓ No unread messages
+                </p>
+            {% endif %}
+
+            <a href="{% url 'message_inbox' %}" class="card-button">
+                Open Messages
+            </a>
+        </div>
+
+        <div class="dashboard-card">
             <h3>My Account</h3>
             <p>
                 You are registered as an Equipment Renter.
                 Use Equip-Hire to find equipment for your construction projects.
             </p>
+        </div>
+
+    </div>
+
+    <div class="pricing-section">
+
+        <h3>Flexible Rental Periods</h3>
+
+        <p>
+            Equip-Hire allows equipment owners to offer different
+            rental durations depending on the equipment.
+        </p>
+
+        <div class="pricing-options">
+
+            <div class="pricing-option">
+                <h4>Hourly Rental</h4>
+                <p>Pay according to the number of hours you need the equipment.</p>
+            </div>
+
+            <div class="pricing-option">
+                <h4>Daily Rental</h4>
+                <p>Hire equipment for your daily construction activities.</p>
+            </div>
+
+            <div class="pricing-option">
+                <h4>Monthly Rental</h4>
+                <p>Hire equipment for longer construction projects.</p>
+            </div>
+
         </div>
 
     </div>

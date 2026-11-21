@@ -115,6 +115,28 @@
             background: #555;
         }
 
+        .notification-count {
+            display: inline-block;
+            background: #fff0df;
+            color: #c66a0a;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .message-count {
+            display: inline-block;
+            background: #e5f0ff;
+            color: #1761a0;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
         footer {
             background: #252525;
             color: #ccc;
@@ -176,7 +198,55 @@
                 your construction equipment and respond to them.
             </p>
 
-            <p><strong>Coming soon</strong></p>
+            <a href="{% url 'owner_rental_requests' %}" class="card-button">
+                Manage Requests
+            </a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Notifications</h3>
+
+            {% if unread_count > 0 %}
+                <span class="notification-count">
+                    {{ unread_count }} Unread
+                </span>
+                <p>
+                    You have new notifications from renters interested
+                    in hiring your equipment.
+                </p>
+            {% else %}
+                <p>
+                    You have no unread notifications.
+                    Check here for updates about rental requests.
+                </p>
+            {% endif %}
+
+            <a href="{% url 'owner_notifications' %}" class="card-button">
+                View Notifications
+            </a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>My Messages</h3>
+
+            {% if unread_message_count > 0 %}
+                <span class="message-count">
+                    {{ unread_message_count }} Unread Messages
+                </span>
+                <p>
+                    You have new messages from renters.
+                    Open your conversations to read and reply.
+                </p>
+            {% else %}
+                <p>
+                    You have no unread messages.
+                    You can communicate with renters through your conversations.
+                </p>
+            {% endif %}
+
+            <a href="{% url 'message_inbox' %}" class="card-button">
+                Open Messages
+            </a>
         </div>
 
         <div class="dashboard-card">

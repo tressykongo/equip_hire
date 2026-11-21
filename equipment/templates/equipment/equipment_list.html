@@ -1,29 +1,148 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Equip-Hire Equipment</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f5f7;
+            margin: 0;
+            padding: 30px;
+            color: #252525;
+        }
+
+        h1 {
+            text-align: center;
+            color: #252525;
+            margin-bottom: 30px;
+        }
+
+        .equipment-card {
+            background: white;
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .equipment-card h2 {
+            margin-top: 0;
+            color: #252525;
+        }
+
+        .equipment-image {
+            width: 100%;
+            max-height: 320px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .price {
+            color: #16834a;
+            font-size: 21px;
+            font-weight: bold;
+            margin: 18px 0;
+            line-height: 1.6;
+        }
+
+        .price-label {
+            color: #666;
+            font-size: 13px;
+            font-weight: normal;
+        }
+
+        .availability {
+            font-weight: bold;
+        }
+
+        .available {
+            color: green;
+        }
+
+        .unavailable {
+            color: red;
+        }
+
+        .empty-message {
+            text-align: center;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .equipment-card {
+                padding: 18px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
     <h1>Available Equipment</h1>
 
     {% for item in equipment %}
-        <div>
+
+        <div class="equipment-card">
+
             <h2>{{ item.name }}</h2>
-            <p>{{ item.description }}</p>
-            <p>Category: {{ item.category }}</p>
-            <p>Rental Price: {{ item.rental_price }}</p>
-            
-            {% if item.available %}
-                <p>Available: Yes</p>
-            {% else %}
-                <p>Available: No</p>
+
+            {% if item.image %}
+                <img
+                    src="{{ item.image.url }}"
+                    alt="{{ item.name }}"
+                    class="equipment-image"
+                >
             {% endif %}
+
+            <p>{{ item.description }}</p>
+
+            <p>
+                <strong>Category:</strong> {{ item.category }}
+            </p>
+
+            <!-- Temporary pricing diagnostic -->
+            <p class="price">
+                TEST PRICE:<br>
+                Equipment: {{ item.name }}<br>
+                Saved Period: {{ item.rental_period }}<br>
+                Period Display: {{ item.get_rental_period_display }}<br>
+                Formatted Price: {{ item.get_formatted_price }}
+            </p>
+
+            {% if item.available %}
+                <p class="availability available">
+                    Available: Yes
+                </p>
+            {% else %}
+                <p class="availability unavailable">
+                    Available: No
+                </p>
+            {% endif %}
+
         </div>
 
-        <hr>
     {% empty %}
-        <p>No equipment available at the moment.</p>
+
+        <p class="empty-message">
+            No equipment available at the moment.
+        </p>
+
     {% endfor %}
 
 </body>

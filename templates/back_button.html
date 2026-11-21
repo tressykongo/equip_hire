@@ -1,0 +1,26 @@
+
+<style>
+    .back-button {
+        display: inline-block;
+        background: #252525;
+        color: white;
+        padding: 11px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        transition: background 0.2s ease;
+    }
+
+    .back-button:hover {
+        background: #f28c28;
+        color: white;
+    }
+</style>
+
+<a href="{% url 'equipment_list' %}"
+   class="back-button"
+   onclick="if (window.history.length > 1 && document.referrer && new URL(document.referrer).origin === window.location.origin) { history.back(); return false; }">
+    &larr; Back
+</a>

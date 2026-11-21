@@ -3,29 +3,150 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Equipment - Equip-Hire</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f5f7;
+            color: #252525;
+        }
+
+        header {
+            background: #252525;
+            color: white;
+            padding: 22px 7%;
+        }
+
+        header h1 {
+            color: #f28c28;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .form-card {
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .current-photo {
+            margin: 20px 0;
+        }
+
+        .current-photo img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        form p {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+            font-family: Arial, sans-serif;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #f28c28;
+        }
+
+        button {
+            width: 100%;
+            background: #f28c28;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #d97716;
+        }
+
+        .errorlist {
+            color: #c62828;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .form-card {
+                padding: 22px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
+<header>
     <h1>Equip-Hire</h1>
-    <h2>Edit Equipment Details</h2>
+</header>
 
-    {% if form.instance.image %}
-        <p>Current equipment photo:</p>
-        <img src="{{ form.instance.image.url }}" alt="Equipment photo" width="250">
-    {% endif %}
+<div class="container">
 
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+    {% include 'back_button.html' %}
 
-        {{ form.as_p }}
+    <div class="form-card">
 
-        <button type="submit">Update Equipment</button>
-    </form>
+        <h2>Edit Equipment Details</h2>
 
-    <p>
-        <a href="{% url 'equipment_list' %}">Back to Equipment List</a>
-    </p>
+        {% if form.instance.image %}
+            <div class="current-photo">
+                <p>Current equipment photo:</p>
+                <img src="{{ form.instance.image.url }}" alt="Equipment photo" width="250">
+            </div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit">Update Equipment</button>
+        </form>
+
+    </div>
+
+</div>
 
 </body>
 </html>

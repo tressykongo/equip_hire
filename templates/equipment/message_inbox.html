@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - Equip-Hire</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f5f7;
+            color: #333;
+        }
+
+        header {
+            background: #172b4d;
+            color: white;
+            padding: 20px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h2 {
+            margin: 0;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .heading h1 {
+            margin: 0;
+            color: #172b4d;
+        }
+
+        .unread {
+            background: #e63946;
+            color: white;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .conversation {
+            background: white;
+            padding: 22px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .conversation h3 {
+            margin: 0 0 8px;
+            color: #172b4d;
+        }
+
+        .conversation p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .open-chat {
+            background: #f4a261;
+            color: #172b4d;
+            padding: 11px 18px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .open-chat:hover {
+            background: #e98b3d;
+        }
+
+        .empty {
+            background: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .conversation {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .open-chat {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>Equip-Hire</h2>
+    <a href="{% url 'equipment_list' %}">Browse Equipment</a>
+</header>
+
+<div class="container">
+
+    {% include 'back_button.html' %}
+
+    <div class="heading">
+        <h1>My Messages</h1>
+
+        {% if unread_count %}
+            <span class="unread">
+                {{ unread_count }} unread message{{ unread_count|pluralize }}
+            </span>
+        {% endif %}
+    </div>
+
+    {% if conversations %}
+
+        {% for conversation in conversations %}
+
+            <div class="conversation">
+
+                <div>
+                    <h3>{{ conversation.rental_request.equipment.name }}</h3>
+
+                    {% if request.user == conversation.rental_request.renter %}
+                        <p>
+                            Equipment Owner:
+                            {{ conversation.rental_request.equipment.owner.username }}
+                        </p>
+                    {% else %}
+                        <p>
+                            Renter:
+                            {{ conversation.rental_request.renter.username }}
+                        </p>
+                    {% endif %}
+
+                    <p>
+                        Last activity:
+                        {{ conversation.updated_at|date:"d M Y, H:i" }}
+                    </p>
+
+                    <p>Status: Accepted</p>
+                </div>
+
+                <a
+                    href="{% url 'chat_room' conversation.pk %}"
+                    class="open-chat"
+                >
+                    Open Chat
+                </a>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty">
+            <h2>No conversations yet</h2>
+            <p>
+                Conversations will appear here after a rental request
+                has been accepted by an equipment owner.
+            </p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

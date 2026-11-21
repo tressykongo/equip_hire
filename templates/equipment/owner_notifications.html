@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Notifications - Equip-Hire</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f5f7;
+            color: #252525;
+        }
+
+        header {
+            background: #252525;
+            color: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h2 {
+            margin: 0;
+            color: #f28c28;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            margin-left: 18px;
+        }
+
+        header a:hover {
+            color: #f28c28;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 950px;
+            margin: 40px auto;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #666;
+        }
+
+        .notification-card {
+            background: white;
+            padding: 22px;
+            border-radius: 9px;
+            margin-bottom: 16px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid #f28c28;
+        }
+
+        .notification-card.unread {
+            background: #fffaf3;
+        }
+
+        .notification-card h3 {
+            margin-top: 0;
+        }
+
+        .notification-card p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .notification-date {
+            color: #888;
+            font-size: 13px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .PENDING {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .ACCEPTED {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .REJECTED {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .new-label {
+            display: inline-block;
+            color: #d97716;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+
+        .read-button {
+            display: inline-block;
+            background: #f28c28;
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .read-button:hover {
+            background: #d97716;
+        }
+
+        .read-label {
+            color: #38804b;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .empty-state {
+            background: white;
+            padding: 50px 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .empty-state p {
+            color: #777;
+        }
+
+        footer {
+            background: #252525;
+            color: #ccc;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px;
+            }
+
+            header a {
+                margin-left: 0;
+                margin-right: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>Equip-Hire</h2>
+
+    <nav>
+        <a href="{% url 'owner_dashboard' %}">Dashboard</a>
+        <a href="{% url 'equipment_list' %}">My Equipment</a>
+        <a href="{% url 'logout' %}">Logout</a>
+    </nav>
+</header>
+
+<div class="container">
+
+    {% include 'back_button.html' %}
+
+    <div class="page-heading">
+        <h1>Owner Notifications</h1>
+        <p>Stay updated when renters submit requests for your equipment.</p>
+    </div>
+
+    {% for notification in notifications %}
+
+        <div class="notification-card {% if not notification.is_read %}unread{% endif %}">
+
+            <h3>New Rental Request</h3>
+
+            <p>{{ notification.message }}</p>
+
+            <p>
+                <strong>Renter:</strong>
+                {{ notification.rental_request.renter.username }}
+            </p>
+
+            <p>
+                <strong>Equipment:</strong>
+                {{ notification.rental_request.equipment.name }}
+            </p>
+
+            <p>
+                <strong>Current Status:</strong>
+                <span class="status {{ notification.rental_request.status }}">
+                    {{ notification.rental_request.get_status_display }}
+                </span>
+            </p>
+
+            <p class="notification-date">
+                {{ notification.created_at|date:"d M Y, H:i" }}
+            </p>
+
+            {% if not notification.is_read %}
+
+                <span class="new-label">New</span>
+
+                <form method="POST"
+                      action="{% url 'mark_owner_notification_read' notification.pk %}">
+                    {% csrf_token %}
+
+                    <button type="submit" class="read-button">
+                        Mark as Read
+                    </button>
+                </form>
+
+            {% else %}
+
+                <span class="read-label">✓ Read</span>
+
+            {% endif %}
+
+        </div>
+
+    {% empty %}
+
+        <div class="empty-state">
+            <h2>No Notifications Yet</h2>
+            <p>You'll receive notifications here when renters submit requests for your equipment.</p>
+        </div>
+
+    {% endfor %}
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Equip-Hire. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>
